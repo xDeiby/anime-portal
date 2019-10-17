@@ -1,8 +1,11 @@
 import React,{ useState, useEffect } from "react";
 import {List, Segment, Icon, Button, Popup, Image} from 'semantic-ui-react'
+import {withRouter} from 'react-router-dom';
 
 
-export default function Episodes ( {anime} ){
+function Episodes (props){
+
+    const {history} = props;
 
     const [episodes, setEpisodes] = useState([]);
 
@@ -11,7 +14,7 @@ export default function Episodes ( {anime} ){
     },[]);
 
     const fetchEpisodes = async () => {
-        const fetchAnim = await fetch(anime);
+        const fetchAnim = await fetch(`https://kitsu.io/api/edge/anime/${props.id_anime}/episodes?page[limit]=20&page[offset]=0`);
         const datos = await fetchAnim.json();
 
         setEpisodes(datos.data);
@@ -27,7 +30,11 @@ export default function Episodes ( {anime} ){
                 trigger={
                     <List.Item>
                         <List.Content floated="right">
-                            <Button circular color="violet">
+                            <Button 
+                            onClick = { () => history.push(`/animes/${props.id_anime}/episode/${ep.attributes.number}`)}
+                            circular 
+                            color="violet"
+                            >
                                 <Icon name = "play circle outline" />
                                 Play
                             </Button>
@@ -42,8 +49,17 @@ export default function Episodes ( {anime} ){
                 >
                     <Popup.Header>Resume</Popup.Header>
                     <Popup.Content >
+                        {ep.attributes.thumbnail ? 
                         <Image src = {ep.attributes.thumbnail.original}/>
-                        {ep.attributes.synopsis}
+                        :
+                        <p>Imagen no disponible</p>
+                        }
+                        
+                        {ep.attributes.synopsis ?
+                        ep.attributes.synopsis
+                        :
+                        <p>Resumen no disponible</p>
+                        }
                     </Popup.Content>
                 </Popup>))}
         </List>
@@ -51,3 +67,4 @@ export default function Episodes ( {anime} ){
     );
 }
 
+export default withRouter(Episodes);

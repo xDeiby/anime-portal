@@ -140,7 +140,7 @@ export default function Anime ( {match} ){
               source='youtube'
             /> 
             :
-            <Episodes anime = {`https://kitsu.io/api/edge/anime/${match.params.id}/episodes?page[limit]=20&page[offset]=0`}/>
+            <Episodes id_anime = {match.params.id}/>
             }
           </Grid.Column>
         </Grid.Row>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Card, Popup, Image, Rating, Container, Pagination } from 'semantic-ui-react';
+import { Card, Popup, Image, Rating, Pagination } from 'semantic-ui-react';
 
 
 const numCards = 18;
@@ -34,7 +34,7 @@ export default function ListAnime (props){
                     inverted
                     key = {obj.id}
                     trigger={
-                        <Card onClick = { () => history.push(`/animes/${obj.id}`)}>
+                        <Card onClick = { () => history.push(`/animes/${obj.id}`) }>
                             <Image src= {obj.attributes.posterImage.medium} />
                             <Card.Content>
                                 <Card.Header>{obj.attributes.slug}</Card.Header>
