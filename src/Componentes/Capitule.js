@@ -7,6 +7,9 @@ export default function Capitule( {match} ){
     const [imagen, setImagen] = useState([]);
     const [datos, setDatos] = useState([]);
     const [activeItem, setActiveItem] = useState("1");
+    const [title, setTitle] = useState("");
+    const [nextPag, setNextPag] = useState([]);
+    const [prevPag, setPrevPag] = useState([]);
 
     const handleItemClick = (e, { name }) => setActiveItem(name);
 
@@ -20,27 +23,32 @@ export default function Capitule( {match} ){
 
         setDatos(datos.data[0].attributes);
         setImagen(datos.data[0].attributes.thumbnail);
+        setTitle(datos.data[0].attributes.titles.en_us);
+
+        setNextPag(datos.links.next);
+        setPrevPag(datos.links.prev);
     }
 
-    console.log(imagen);
+
 
     return (
         <React.Fragment>
 
-        <Grid className= "Cap">
-            <Grid.Row>
-                <Divider horizontal>
-                    <Header color="violet" as='h4'>
-                        <Icon name='bar chart' />
-                        {`Capitulo ${match.params.id2}`}
-                    </Header>
-                </Divider>
-                <Embed
-                    id={datos.youtubeVideoId}
-                    placeholder= {imagen.original}
-                    source='youtube'
-                /> 
-            </Grid.Row>
+        <Divider horizontal>
+            <Header color="violet" as='h4'>
+                <Icon name='bar chart' />
+                {`Capitulo ${match.params.id2}`}
+            </Header>
+        </Divider>        
+        <Embed
+            id='O6Xo21L0ybE'
+            placeholder= {imagen.original}
+            source='youtube'
+        />
+
+        <Divider hidden/>
+
+        <Grid className = "Cap">
             <Grid.Row>
                 <Menu attached='bottom' tabular>
                     <Menu.Item
@@ -111,13 +119,16 @@ export default function Capitule( {match} ){
                  <Image src = {imagen.original} />
                 </Grid.Column>
                 <Grid.Column width = {13}>
+                    <Header color="violet">{title}</Header>
                     {datos.synopsis}
                 </Grid.Column>
             </Grid.Row>
 
             <Grid.Row columns="six" centered color= "black">
                 <Grid.Column >
-                        <Button icon labelPosition='left' color="violet">
+                        <Button 
+                        onClick = {() => fetchEpisode(prevPag)}
+                        icon labelPosition='left' color="violet">
                             Capitulo Anterior
                             <Icon name='left arrow' />
                         </Button>
@@ -131,7 +142,9 @@ export default function Capitule( {match} ){
                     </Grid.Column>
 
                     <Grid.Column>
-                        <Button icon labelPosition='right' color="violet">
+                        <Button 
+                        onClick = {() => fetchEpisode(nextPag)}
+                        icon labelPosition='right' color="violet">
                             Siguiente Capitulo
                             <Icon name='right arrow' />
                         </Button>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Card, Popup, Image, Rating, Pagination } from 'semantic-ui-react';
+import { Card, Popup, Image, Rating, Pagination, Grid } from 'semantic-ui-react';
 
 
 const numCards = 18;
@@ -9,11 +9,10 @@ export default function ListAnime (props){
 
     const {history} = props;
 
-    const [pagAct, setPagAct] = useState(0)
     const [anime, setAnime] = useState([]);
 
     useEffect( () => {
-        fetchAnimes(pagAct);
+        fetchAnimes(1);
     }, []);
 
     const fetchAnimes = async(pagina) => {
@@ -23,11 +22,9 @@ export default function ListAnime (props){
         setAnime(arrays.data);
     }
 
-    console.log(pagAct);
-
     return (
 
-        <React.Fragment>
+        <Grid>
             <Card.Group itemsPerRow = {6}>
             {anime.map( obj => (
                 <Popup
@@ -48,17 +45,17 @@ export default function ListAnime (props){
                     </Popup.Content>
                 </Popup>))}
         </Card.Group>
-        <Pagination
-         defaultActivePage={pagAct+1}
-         activePage = {pagAct}
-         totalPages={ Math.ceil(cantAnimes / numCards) }
-         firstItem = {null}
-         lastItem = {null}
-         onPageChange = {(e, pageInfo) => { setPagAct(pageInfo.activePage, fetchAnimes(pagAct)) }}
-         boundaryRange = {8}
-        />    
-        </React.Fragment>
+        <Grid.Row centered>
+            <Pagination
+                defaultActivePage={1}
+                totalPages={ Math.ceil(cantAnimes / numCards) }
+                firstItem = {null}
+                lastItem = {null}
+                onPageChange = {(e, pageInfo) => { fetchAnimes(pageInfo.activePage+1) } }
+                boundaryRange = {8}
+            />    
+        </Grid.Row>
+        </Grid>
     );
-
 
 }
